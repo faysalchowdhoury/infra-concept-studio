@@ -2,7 +2,8 @@
 
 **Connected & Electrified Transportation Corridor Screening Studio**
 
-🔗 **Live Demo:** [https://faysalchowdhoury.github.io/infra-concept-studio/](https://faysalchowdhoury.github.io/infra-concept-studio/)
+🔗 **Live Demo:** [https://faysalchowdhoury.github.io/infra-concept-studio/](https://faysalchowdhoury.github.io/infra-concept-studio/)  
+🎬 **Walkthrough Video:** [InfraConcept_Studio_LinkedIn_Demo.mp4](docs/InfraConcept_Studio_LinkedIn_Demo.mp4)
 
 ---
 
