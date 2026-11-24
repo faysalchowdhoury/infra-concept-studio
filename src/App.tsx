@@ -3,8 +3,6 @@ import {
   Activity,
   Construction,
   Download,
-  Info,
-  Layers,
   RotateCcw,
   ShieldAlert,
   Zap,
@@ -24,27 +22,17 @@ import {
   WorkZoneParams,
   solveWorkZone,
 } from './physics/workZoneSolver';
-import {
-  DEFAULT_GEOTECH_PARAMS,
-  GeotechWallParams,
-  solveGeotechWall,
-} from './physics/geotechWallSolver';
 import { EvGridModule } from './modules/EvGridModule';
 import { V2xFdiModule } from './modules/V2xFdiModule';
 import { WorkZoneModule } from './modules/WorkZoneModule';
-import { GeotechWallModule } from './modules/GeotechWallModule';
 
-type ModuleId = 'ev_grid' | 'v2x_fdi' | 'work_zone' | 'geotech_wall';
+type ModuleId = 'ev_grid' | 'v2x_fdi' | 'work_zone';
 
 const TABS: { id: ModuleId; label: string; icon: React.ReactNode }[] = [
   { id: 'ev_grid', label: '1. EV Grid & Emissions', icon: <Zap className="h-3.5 w-3.5" /> },
   { id: 'v2x_fdi', label: '2. V2X Cyber-Physics', icon: <ShieldAlert className="h-3.5 w-3.5" /> },
   { id: 'work_zone', label: '3. Arterial Work-Zone', icon: <Construction className="h-3.5 w-3.5" /> },
-  { id: 'geotech_wall', label: '4. Geotech Wall & Footing', icon: <Layers className="h-3.5 w-3.5" /> },
 ];
-
-const DISCLAIMER_TEXT =
-  'Concept-Sizing & Educational Screening Tool — Final design requires full CFD/FEA/microsimulation validation';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<ModuleId>('ev_grid');
@@ -56,9 +44,6 @@ export function App() {
   const [workZoneParams, setWorkZoneParams] = useState<WorkZoneParams>(() => ({
     ...DEFAULT_WORK_ZONE_PARAMS,
   }));
-  const [geotechParams, setGeotechParams] = useState<GeotechWallParams>(() => ({
-    ...DEFAULT_GEOTECH_PARAMS,
-  }));
 
   const handleResetDefaults = () => {
     setEvParams({ ...DEFAULT_EV_GRID_PARAMS });
@@ -67,14 +52,13 @@ export function App() {
       vehicleAttacks: { ...DEFAULT_V2X_PARAMS.vehicleAttacks },
     });
     setWorkZoneParams({ ...DEFAULT_WORK_ZONE_PARAMS });
-    setGeotechParams({ ...DEFAULT_GEOTECH_PARAMS });
   };
 
   const handleExportReport = () => {
     const report = {
       application: 'InfraConcept Studio',
+      subtitle: 'Connected & Electrified Transportation Corridor Screening Studio',
       generatedAtIso: new Date().toISOString(),
-      disclaimer: DISCLAIMER_TEXT,
       activeModule: activeTab,
       modules: {
         evGridAndEmissions: {
@@ -88,10 +72,6 @@ export function App() {
         arterialWorkZone: {
           inputs: workZoneParams,
           outputs: solveWorkZone(workZoneParams),
-        },
-        geotechWallAndFooting: {
-          inputs: geotechParams,
-          outputs: solveGeotechWall(geotechParams),
         },
       },
     };
@@ -123,7 +103,7 @@ export function App() {
                 InfraConcept Studio
               </h1>
               <p className="font-mono text-[10px] text-slate-500">
-                Civil & Smart-Infrastructure Screening Workstation
+                Connected &amp; Electrified Transportation Corridor Screening Studio
               </p>
             </div>
           </div>
@@ -170,14 +150,6 @@ export function App() {
         </div>
       </header>
 
-      {/* Screening Disclaimer Banner */}
-      <div className="shrink-0 border-b border-amber-200 bg-amber-50 px-4 py-1.5">
-        <div className="mx-auto flex items-center justify-center gap-2 text-center text-[11px] font-medium text-amber-900">
-          <Info className="h-3.5 w-3.5 shrink-0 text-amber-700" />
-          <span>{DISCLAIMER_TEXT}</span>
-        </div>
-      </div>
-
       {/* Main 3-Panel Engineering Workstation */}
       <main className="flex-1 min-h-0 p-3 overflow-y-auto lg:overflow-hidden">
         {activeTab === 'ev_grid' && (
@@ -188,9 +160,6 @@ export function App() {
         )}
         {activeTab === 'work_zone' && (
           <WorkZoneModule params={workZoneParams} onChange={setWorkZoneParams} />
-        )}
-        {activeTab === 'geotech_wall' && (
-          <GeotechWallModule params={geotechParams} onChange={setGeotechParams} />
         )}
       </main>
     </div>
